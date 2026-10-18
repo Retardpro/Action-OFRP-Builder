@@ -7,10 +7,10 @@ on:
         description: "Select Device Tree repository"
         required: true
         type: choice
-        default: https://github.com/AzzyC/ofox_device_xiaomi_peridot
+        default: https://github.com/Retardpro/android_device_motorola_roadstr
         options:
-          - https://github.com/AzzyC/ofox_device_xiaomi_peridot
-          - https://gitlab.com/OrangeFox/device/peridot_new
+          - https://github.com/Retardpro/android_device_motorola_roadstr
+          - https://gitlab.com/OrangeFox/device/roadstr_new
 
       device_tree_branch:
         description: "Select Device Tree branch"
@@ -42,9 +42,9 @@ jobs:
       MANIFEST_BRANCH: 14.1
       DEVICE_TREE_URL: ${{ inputs.device_tree_url }}
       DEVICE_TREE_BRANCH: ${{ inputs.device_tree_branch }}
-      DEVICE_PATH: device/xiaomi/peridot
-      DEVICE_NAME: peridot
-      MAKEFILE_NAME: twrp_peridot-ap2a-eng
+      DEVICE_PATH: device/motorola/roadstr
+      DEVICE_NAME: roadstr
+      MAKEFILE_NAME: twrp_roadstr-eng
       BUILD_TARGET: recovery
       TELEGRAM_CHAT_ID: ${{ inputs.notification_mode == 'quiet' && '-1002917930475' || '-1001480977582' }}
       TZ: Europe/London
