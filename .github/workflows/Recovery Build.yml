@@ -21,14 +21,7 @@ on:
           - fox_14.1
           - auto-dfe
 
-      notification_mode:
-        description: "Select Telegram notification mode"
-        required: true
-        type: choice
-        default: quiet
-        options:
-          - quiet
-          - loud
+      
 
 jobs:
   build:
@@ -45,9 +38,7 @@ jobs:
       DEVICE_PATH: device/motorola/roadstr
       DEVICE_NAME: roadstr
       MAKEFILE_NAME: twrp_roadstr-eng
-      BUILD_TARGET: recovery
-      TELEGRAM_CHAT_ID: ${{ inputs.notification_mode == 'quiet' && '-1002917930475' || '-1001480977582' }}
-      TZ: Europe/London
+      BUILD_TARGET: recovery      
 
     steps:
 
@@ -63,7 +54,6 @@ jobs:
 
     - name: Prepare the build environment
       run: |
-        /tmp/send_msg.sh "🧩 Preparing build environment..."
         DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
             linux-modules-extra-$(uname -r) \
             git python3 tar aria2
@@ -188,3 +178,4 @@ jobs:
         DEVICE_TREE_BROWSE_URL="${{ env.DEVICE_TREE_URL }}/tree/${{ steps.devtree_commit.outputs.LATEST_COMMIT }}"
         RECOVERY_BROWSE_URL="https://gitlab.com/OrangeFox/bootable/Recovery/tree/${{ steps.recovery_commit.outputs.RECOVERY_COMMIT }}"
         /tmp/send_msg.sh "📦 *Build complete!*\n🔗 [Download]($RELEASE_URL)\n🌲 Device tree branch: \`${{ env.DEVICE_TREE_BRANCH }}\`\n🌲 Device tree commit: [${{ steps.devtree_commit.outputs.LATEST_COMMIT }}]($DEVICE_TREE_BROWSE_URL)\n🔁 bootable/recovery commit: [${{ steps.recovery_commit.outputs.RECOVERY_COMMIT }}]($RECOVERY_BROWSE_URL)"
+        
