@@ -7,9 +7,9 @@ on:
         description: "Select Device Tree repository"
         required: true
         type: choice
-        default: https://github.com/Retardpro/fox_device_motorola_roadstr
+        default: https://github.com/Retardpro/ofox_device_motorola_roadstr
         options:
-          - https://github.com/Retardpro/fox_device_motorola_roadstr
+          - https://github.com/Retardpro/ofox_device_motorola_roadstr
           - https://gitlab.com/OrangeFox/device/roadstr_new
 
       device_tree_branch:
