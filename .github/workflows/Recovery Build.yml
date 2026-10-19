@@ -21,7 +21,8 @@ jobs:
       DEVICE_NAME: roadstr
       MAKEFILE_NAME: twrp_roadstr-ap2a-eng
       BUILD_TARGET: recovery
-      TZ: Europe/London
+      KERNEL_VERSION: 6.6.139-MioTest-gf77elb4f66al
+      TZ: Asia/Kolkata
 
     steps:
       - name: Cleanup
@@ -56,7 +57,6 @@ jobs:
         working-directory: ${{ steps.pwd.outputs.workspace-folder }}
         run: |
           git clone --depth=1 "$SYNC_URL" sync
-
           cd sync
           ./orangefox_sync.sh \
             --branch "$MANIFEST_BRANCH" \
@@ -94,14 +94,16 @@ jobs:
       - name: Show system resources
         working-directory: ${{ steps.pwd.outputs.workspace-folder }}
         run: |
-          echo "CPU cores:"
           nproc
-          echo
-          echo "Memory:"
           free -h
-          echo
-          echo "Disk:"
           df -h
+
+      - name: Set kernel version text
+        working-directory: ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}
+        run: |
+          mkdir -p "out/target/product/$DEVICE_NAME/obj/PACKAGING/check_vintf_all_intermediates"
+          printf '%s\n' "$KERNEL_VERSION" \
+            > "out/target/product/$DEVICE_NAME/obj/PACKAGING/check_vintf_all_intermediates/kernel_version.txt"
 
       - name: Build recovery
         working-directory: ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}
@@ -113,20 +115,14 @@ jobs:
           export FOX_MAINTAINER_PATCH_VERSION="8"
 
           lunch "$MAKEFILE_NAME"
-
           mka adbd "${BUILD_TARGET}image" -j"$(nproc --all)"
 
       - name: Show system resources after build
         if: always()
         working-directory: ${{ steps.pwd.outputs.workspace-folder }}
         run: |
-          echo "CPU cores:"
           nproc
-          echo
-          echo "Memory:"
           free -h
-          echo
-          echo "Disk:"
           df -h
 
       - name: Upload to GitHub Release
@@ -142,6 +138,7 @@ jobs:
             Manifest: ${{ env.MANIFEST_BRANCH }}
             Device: ${{ env.DEVICE_NAME }}
             Target: ${{ env.BUILD_TARGET }}
+            Kernel version: ${{ env.KERNEL_VERSION }}
             Device tree branch: ${{ env.DEVICE_TREE_BRANCH }}
             Device tree commit: ${{ steps.devtree_commit.outputs.LATEST_COMMIT }}
             Device tree URL: ${{ env.DEVICE_TREE_URL }}/tree/${{ steps.devtree_commit.outputs.LATEST_COMMIT }}
@@ -149,3 +146,4 @@ jobs:
             Recovery source URL: https://gitlab.com/OrangeFox/bootable/Recovery/tree/${{ steps.recovery_commit.outputs.RECOVERY_COMMIT }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
