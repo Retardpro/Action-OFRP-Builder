@@ -12,7 +12,7 @@
 
 ## Release Notes
 ```
-= 2023/04/20
+= 2026/10/19
 - The first available version is submitted.
 ```
 
@@ -23,14 +23,14 @@
 | Name | Description | Example |
 | ------------ | -------------------- | ------------ |
 | `SYNC_URL` | Script specified by OrangeFox | https://gitlab.com/OrangeFox/sync.git |
-| `MANIFEST_BRANCH` | Source branch | 12.1                                                         |
+| `MANIFEST_BRANCH` | Source branch | 14.1                                                         |
 | `DEVICE_TREE_URL` | Device address | https://github.com/OrangeFoxRecovery/device_xiaomi_laurel_sprout |
-| `DEVICE_TREE_BRANCH` | Device branch | fox_12.1 |
-| `DEVICE_PATH` | Device location | device/xiaomi/laurel_sprout |
+| `DEVICE_TREE_BRANCH` | Device branch | main |
+| `DEVICE_PATH` | Device location | device/motorola/roadstr |
 | `COMMON_TREE_URL` | Common tree address |  |
 | `COMMON_PATH` | Common tree location |  |
-| `DEVICE_NAME` | Model name | laurel_sprout |
-| `MAKEFILE_NAME` | Makefile name | twrp_laurel_sprout |
+| `DEVICE_NAME` | Model name | roadtsr |
+| `MAKEFILE_NAME` | Makefile name | twrp_roadstr |
 | `BUILD_TARGET` | Build Target Partition (boot/recovery/vendorboot) | recovery |
 
 -----
