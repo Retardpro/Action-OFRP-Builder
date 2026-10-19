@@ -92,6 +92,15 @@ jobs:
           free -h
           sudo swapon --show
 
+      - name: Install repo launcher
+        run: |
+          mkdir -p "$HOME/bin"
+          curl -fsSL \
+            https://storage.googleapis.com/git-repo-downloads/repo \
+            -o "$HOME/bin/repo"
+          chmod +x "$HOME/bin/repo"
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+          "$HOME/bin/repo" --version
        
 
       - name: Sync OrangeFox source
