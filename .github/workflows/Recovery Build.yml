@@ -74,11 +74,23 @@ jobs:
 
       - name: Configure swap
         run: |
+          set -eux
+
+          if sudo swapon --show=NAME --noheadings | grep -qx '/swapfile'; then
+            sudo swapoff /swapfile
+          fi
+
+          if sudo test -e /swapfile; then
+            sudo rm -f /swapfile
+          fi
+
           sudo fallocate -l 30G /swapfile
           sudo chmod 600 /swapfile
           sudo mkswap /swapfile
           sudo swapon /swapfile
+
           free -h
+          sudo swapon --show
 
       - name: Sync OrangeFox source
         run: |
