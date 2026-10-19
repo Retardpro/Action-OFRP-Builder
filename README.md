@@ -24,7 +24,7 @@
 | ------------ | -------------------- | ------------ |
 | `SYNC_URL` | Script specified by OrangeFox | https://gitlab.com/OrangeFox/sync.git |
 | `MANIFEST_BRANCH` | Source branch | 14.1                                                         |
-| `DEVICE_TREE_URL` | Device address | https://github.com/OrangeFoxRecovery/device_xiaomi_laurel_sprout |
+| `DEVICE_TREE_URL` | Device address | https://github.com/OrangeFoxRecovery/device_motorola_roadstr |
 | `DEVICE_TREE_BRANCH` | Device branch | main |
 | `DEVICE_PATH` | Device location | device/motorola/roadstr |
 | `COMMON_TREE_URL` | Common tree address |  |
