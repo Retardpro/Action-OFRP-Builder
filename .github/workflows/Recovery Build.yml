@@ -34,7 +34,7 @@ jobs:
           mkdir -p "$GITHUB_WORKSPACE/workspace"
           echo "workspace-folder=$GITHUB_WORKSPACE/workspace" >> "$GITHUB_OUTPUT"
 
-       - name: Prepare the build environment
+      - name: Prepare the build environment
         working-directory: ${{ steps.pwd.outputs.workspace-folder }}
         run: |
           sudo apt-get update
