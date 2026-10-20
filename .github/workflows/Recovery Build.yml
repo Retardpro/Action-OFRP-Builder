@@ -34,13 +34,17 @@ jobs:
           mkdir -p "$GITHUB_WORKSPACE/workspace"
           echo "workspace-folder=$GITHUB_WORKSPACE/workspace" >> "$GITHUB_OUTPUT"
 
-      - name: Prepare the build environment
+       - name: Prepare the build environment
         working-directory: ${{ steps.pwd.outputs.workspace-folder }}
         run: |
           sudo apt-get update
+
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
-            linux-modules-extra-$(uname -r) \
-            git python3 tar aria2 curl
+            git \
+            python3 \
+            tar \
+            aria2 \
+            curl
 
           curl -fL -o android_build_env.sh \
             https://gitlab.com/OrangeFox/misc/scripts/-/raw/master/setup/android_build_env.sh
