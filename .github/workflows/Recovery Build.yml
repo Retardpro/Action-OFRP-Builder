@@ -121,12 +121,38 @@ jobs:
           lunch "$MAKEFILE_NAME"
           mka adbd "${BUILD_TARGET}image" -j"$(nproc --all)"
 
+       
       - name: Rename output to 14.0
         working-directory: ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}
         run: |
           set -euo pipefail
+
           PRODUCT_OUT="out/target/product/$DEVICE_NAME"
-          shopt -s nullglob
+
+          for ext in img zip; do
+            file="$PRODUCT_OUT/OrangeFox-R12.0_8_crypto-Stable-roadstr.$ext"
+            new_file="$PRODUCT_OUT/OrangeFox-R14.0_8_crypto-Stable-roadstr.$ext"
+
+            if [ -f "$file" ]; then
+              mv "$file" "$new_file"
+              echo "Renamed: $(basename "$file") -> $(basename "$new_file")"
+            else
+              echo "ERROR: File not found: $file"
+              exit 1
+            fi
+          done
+
+          for ext in img.md5 zip.md5; do
+            file="$PRODUCT_OUT/OrangeFox-R12.0_8_crypto-Stable-roadstr.$ext"
+            new_file="$PRODUCT_OUT/OrangeFox-R14.0_8_crypto-Stable-roadstr.$ext"
+
+            if [ -f "$file" ]; then
+              sed 's/OrangeFox-R12.0_8_crypto-Stable-roadstr/OrangeFox-R14.0_8_crypto-Stable-roadstr/g' "$file" > "$new_file"
+              rm "$file"
+              echo "Updated checksum: $(basename "$new_file")"
+            fi
+          done
+
 
           files=(
             "$PRODUCT_OUT"/12.0.*_8_Crypto-stable-roadstr.img
@@ -158,9 +184,8 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           files: |
-            ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}/out/target/product/${{ env.DEVICE_NAME }}/14.0.*_8_Crypto-stable-roadstr.img
-            ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}/out/target/product/${{ env.DEVICE_NAME }}/14.0.*_8_Crypto-stable-roadstr.zip
-          fail_on_unmatched_files: true
+            ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}/out/target/product/${{ env.DEVICE_NAME }}/OrangeFox-R14.0_8_crypto-Stable-roadstr.img
+            ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}/out/target/product/${{ env.DEVICE_NAME }}/OrangeFox-R14.0_8_crypto-Stable-roadstr.zip          fail_on_unmatched_files: true
           name: ${{ env.DEVICE_NAME }}-${{ env.DEVICE_TREE_BRANCH }}-${{ steps.devtree_commit.outputs.LATEST_COMMIT }}
           tag_name: ${{ github.run_id }}
           body: |
