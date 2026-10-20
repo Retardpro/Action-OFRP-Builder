@@ -121,6 +121,31 @@ jobs:
           lunch "$MAKEFILE_NAME"
           mka adbd "${BUILD_TARGET}image" -j"$(nproc --all)"
 
+      - name: Rename output to 14.0
+        working-directory: ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}
+        run: |
+          set -euo pipefail
+          PRODUCT_OUT="out/target/product/$DEVICE_NAME"
+          shopt -s nullglob
+
+          files=(
+            "$PRODUCT_OUT"/12.0.*_8_Crypto-stable-roadstr.img
+            "$PRODUCT_OUT"/12.0.*_8_Crypto-stable-roadstr.zip
+          )
+
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "ERROR: No matching 12.0.*_8_Crypto-stable-roadstr image or ZIP found."
+            echo "Available output files:"
+            find "$PRODUCT_OUT" -maxdepth 1 -type f -print
+            exit 1
+          fi
+
+          for file in "${files[@]}"; do
+            new_file="${file/12.0./14.0.}"
+            mv "$file" "$new_file"
+            echo "Renamed: $(basename "$file") -> $(basename "$new_file")"
+          done
+
       - name: Show system resources after build
         if: always()
         working-directory: ${{ steps.pwd.outputs.workspace-folder }}
@@ -133,8 +158,8 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           files: |
-            ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}/out/target/product/${{ env.DEVICE_NAME }}/OrangeFox-R*.img
-            ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}/out/target/product/${{ env.DEVICE_NAME }}/OrangeFox-R*.zip
+            ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}/out/target/product/${{ env.DEVICE_NAME }}/14.0.*_8_Crypto-stable-roadstr.img
+            ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ env.MANIFEST_BRANCH }}/out/target/product/${{ env.DEVICE_NAME }}/14.0.*_8_Crypto-stable-roadstr.zip
           fail_on_unmatched_files: true
           name: ${{ env.DEVICE_NAME }}-${{ env.DEVICE_TREE_BRANCH }}-${{ steps.devtree_commit.outputs.LATEST_COMMIT }}
           tag_name: ${{ github.run_id }}
@@ -150,5 +175,4 @@ jobs:
             Recovery source URL: https://gitlab.com/OrangeFox/bootable/Recovery/tree/${{ steps.recovery_commit.outputs.RECOVERY_COMMIT }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
           
