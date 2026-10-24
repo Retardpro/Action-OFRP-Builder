@@ -20,7 +20,7 @@ jobs:
       DEVICE_NAME: roadstr
       MAKEFILE_NAME: twrp_roadstr-ap2a-eng
       BUILD_TARGET: recovery
-      KERNEL_VERSION: 6.6.139-MioTest-gf77elb4f66al
+      KERNEL_VERSION: 6.6.139-MioKernel-Recovery
       TZ: Asia/Kolkata
 
     steps:
